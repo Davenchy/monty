@@ -15,6 +15,7 @@ void runner(void)
 	int i, len;
 	instruction_t instructions[] = {
 		{ "push", push_opcode }, { "pall", pall_opcode }, { "pint", pint_opcode },
+		{ "pop", pop_opcode },
 		{ NULL, NULL },
 	};
 

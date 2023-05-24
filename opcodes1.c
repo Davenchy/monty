@@ -55,3 +55,17 @@ void pint_opcode(stack_t **stack, unsigned int UNUSE line_number)
 	else
 		monty_exit_msg("can't pint, stack empty");
 }
+
+/**
+ * pop_opcode - removes the top element of the stack
+ * @stack: pointer to the stack head
+ * @line_number: the current line number
+ */
+void pop_opcode(stack_t **stack, unsigned int UNUSE line_number)
+{
+	stack_t *curr;
+
+	curr = stack_pop(stack);
+	if (!curr)
+		monty_exit_msg("can't pop an empty stack");
+}

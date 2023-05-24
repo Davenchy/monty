@@ -24,5 +24,6 @@ typedef struct instruction_s
 void push_opcode(stack_t **stack, unsigned int line_number);
 void pall_opcode(stack_t **stack, unsigned int line_number);
 void pint_opcode(stack_t **stack, unsigned int UNUSE line_number);
+void pop_opcode(stack_t **stack, unsigned int UNUSE line_number);
 
 #endif
