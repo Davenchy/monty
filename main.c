@@ -11,23 +11,24 @@
  */
 void runner(void)
 {
+	CTX_DEC;
 	int i, len;
 	instruction_t instructions[] = {
 		{ "push", push_opcode }, { "pall", pall_opcode },
 		{ NULL, NULL },
 	};
 
-	parse_line(ctx.line, &ctx.cmd);
-	len = strlen(ctx.cmd.opcode);
+	parse_line(CTX_LINE, &CTX_CMD);
+	len = strlen(CTX_CMD.opcode);
 	for (i = 0; instructions[i].opcode; i++)
-		if (!strncmp(instructions[i].opcode, ctx.cmd.opcode, len))
+		if (!strncmp(instructions[i].opcode, CTX_CMD.opcode, len))
 		{
-			instructions[i].f(&ctx.stack, ctx.line_number);
+			instructions[i].f(&ctx->stack, ctx->line_number);
 			return;
 		}
 
 	monty_destroy("L%lu: unknown instruction %s\n",
-							 ctx.line_number, ctx.cmd.opcode);
+							 ctx->line_number, CTX_CMD.opcode);
 }
 
 /**
@@ -36,6 +37,7 @@ void runner(void)
  */
 int main_loop(void)
 {
+	CTX_DEC;
 	ssize_t state = 0;
 
 loop:
@@ -50,10 +52,10 @@ loop:
 	}
 	if (T_HAS_DATA(state))
 		runner();
-	if (ctx.line)
+	if (CTX_LINE)
 	{
-		free(ctx.line);
-		ctx.line = NULL;
+		free(CTX_LINE);
+		CTX_LINE = NULL;
 	}
 	goto loop;
 end:
@@ -69,7 +71,15 @@ end:
 int main(int argc, char **argv)
 {
 	char *filepath = NULL;
+	context_t *ctx;
 	int state = EXIT_SUCCESS;
+
+	if (!context_init())
+	{
+		fprintf(stderr, "Error: malloc failed\n");
+		exit(EXIT_FAILURE);
+	}
+	ctx = CTX_LOAD;
 
 	if (argc != 2)
 	{
@@ -78,9 +88,8 @@ int main(int argc, char **argv)
 	}
 
 	filepath = argv[1];
-	context_init();
-	ctx.file = fopen(filepath, "r");
-	if (!ctx.file)
+	CTX_FILE = fopen(filepath, "r");
+	if (!CTX_FILE)
 	{
 		fprintf(stderr, "Error: Can't open file %s\n", filepath);
 		exit(EXIT_FAILURE);

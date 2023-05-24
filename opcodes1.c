@@ -11,15 +11,16 @@
  */
 void push_opcode(stack_t **stack, unsigned int UNUSE line_number)
 {
+	CTX_DEC;
 	int value;
 
 	if (!stack)
 		return;
 
-	if (!ctx.cmd.arg || !is_digit(ctx.cmd.arg))
+	if (!CTX_CMD.arg || !is_digit(CTX_CMD.arg))
 		monty_exit_msg("push integer");
 
-	value = atoi(ctx.cmd.arg);
+	value = atoi(CTX_CMD.arg);
 	stack_push(stack, value);
 }
 

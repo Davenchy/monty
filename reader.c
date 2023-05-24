@@ -11,10 +11,12 @@
  */
 char skip_whitespaces(char c)
 {
-	for (; c != -1 && c != 10 && c != '#' && isspace(c); c = fgetc(ctx.file))
+	CTX_DEC;
+
+	for (; c != -1 && c != 10 && c != '#' && isspace(c); c = fgetc(CTX_FILE))
 		continue;
 	if (c == '#')
-		for (; c != -1 && c != 10; c = fgetc(ctx.file))
+		for (; c != -1 && c != 10; c = fgetc(CTX_FILE))
 			continue;
 	return (c);
 }
@@ -29,11 +31,13 @@ char skip_whitespaces(char c)
  */
 char readtoken(char *buffer, char c, size_t *size, size_t *tsize)
 {
+	CTX_DEC;
+
 loop:
 	if (c == -1 || c == '#' || *size > BUFFER_SIZE || isspace(c))
 		return (c);
 	buffer[(*size)++] = c;
-	c = fgetc(ctx.file);
+	c = fgetc(CTX_FILE);
 	(*tsize)++;
 	goto loop;
 }
@@ -53,14 +57,15 @@ loop:
  */
 ssize_t readline(void)
 {
+	CTX_DEC;
 	char buffer[BUFFER_SIZE], c = 0;
 	size_t size = 0, opsize = 0, argsize = 0;
 
-	ctx.line = NULL;
+	CTX_LINE = NULL;
 loop:
 	if (c == 10)
-		ctx.line_number++;
-	c = fgetc(ctx.file);
+		ctx->line_number++;
+	c = fgetc(CTX_FILE);
 	c = skip_whitespaces(c);
 	c = readtoken(buffer, c, &size, &opsize);
 	/* is empty line */
@@ -76,20 +81,20 @@ loop:
 
 	/* allocate token */
 	size = opsize + argsize + (argsize ? 1 : 0);
-	ctx.line = malloc(size);
-	if (!ctx.line)
+	CTX_LINE = malloc(size);
+	if (!CTX_LINE)
 		return (T_ERR);
-	(ctx.line)[size] = 0;
+	CTX_LINE[size] = 0;
 
 	/* copy bytes */
-	memcpy(ctx.line, buffer, opsize);
+	memcpy(CTX_LINE, buffer, opsize);
 	if (argsize)
 	{
-		ctx.line[opsize] = ' ';
-		memcpy(ctx.line + opsize + 1, buffer + opsize, argsize);
+		CTX_LINE[opsize] = ' ';
+		memcpy(CTX_LINE + opsize + 1, buffer + opsize, argsize);
 	}
 
-	ctx.line_number++;
+	ctx->line_number++;
 	return (size);
 }
 

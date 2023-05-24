@@ -5,6 +5,22 @@
 #include "stack.h"
 #include <stdio.h>
 
+#define CTX_LOAD context_control(NULL, A_GET)
+#define CTX_SET(ctx) context_control(ctx, A_SET)
+#define CTX_DEC context_t *ctx = CTX_LOAD
+
+#define CTX_FILE (ctx->file)
+#define CTX_LINE (ctx->line)
+#define CTX_CMD (ctx->cmd)
+
+/**
+ * enum action_e - the action to control the context storage
+ * @A_GET: get the stored context object
+ * @A_SET: set a context object
+ */
+typedef enum action_e
+{ A_GET, A_SET } action_t;
+
 /**
  * struct context_s - object that holds the state of the interpreter
  * @file: the currently opend file stream object
@@ -22,10 +38,9 @@ typedef struct context_s
 	size_t line_number;
 } context_t;
 
-extern context_t ctx;
-
-void context_init(void);
+int context_init(void);
 void context_destroy(void);
+context_t *context_control(context_t *ctx, action_t action);
 void monty_exit_msg(const char *msg);
 /**
  * monty_destroy - free memory show error message and exit
