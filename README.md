@@ -30,3 +30,7 @@ gcc -Wall -Werror -Wextra -pedantic -std=c89 -o monty *.c
 ### pall
 
 - prints all the values in the stack from top to bottom
+
+### pint
+
+- prints the value at the top of the stack

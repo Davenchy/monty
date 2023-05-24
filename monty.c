@@ -47,7 +47,7 @@ void context_destroy(void)
 void monty_exit_msg(const char *msg)
 {
 	CTX_DEC;
-	monty_destroy("L%lu: usage: %s\n", ctx->line_number, msg);
+	monty_destroy("L%lu: %s\n", ctx->line_number, msg);
 }
 
 /**

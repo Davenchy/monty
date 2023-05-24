@@ -14,7 +14,7 @@ void runner(void)
 	CTX_DEC;
 	int i, len;
 	instruction_t instructions[] = {
-		{ "push", push_opcode }, { "pall", pall_opcode },
+		{ "push", push_opcode }, { "pall", pall_opcode }, { "pint", pint_opcode },
 		{ NULL, NULL },
 	};
 
@@ -46,7 +46,7 @@ loop:
 	if (state == T_EOF)
 		goto end;
 	if (state == T_ERR)
-		monty_exit_msg("Error: malloc failed\n");
+		monty_destroy("Error: malloc failed\n");
 	if (T_HAS_DATA(state))
 		runner();
 	if (CTX_LINE)

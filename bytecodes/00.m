@@ -1,3 +1,4 @@
+# pint
 push 5
    push   6
 
@@ -14,3 +15,6 @@ push 5
 
 
 pall
+
+push 1999
+pint
