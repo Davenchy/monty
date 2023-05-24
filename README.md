@@ -16,7 +16,14 @@ gcc -Wall -Werror -Wextra -pedantic -std=c89 -o monty *.c
 
 ## Examples
 
-- Check the `/bytecodes` directory for examples scripts
+- Check the `/bytecodes` directory for example scripts
+
+## Comments
+
+```
+# this is a comment
+push 5 # this is another comment
+```
 
 ## ByteCodes
 
