@@ -33,9 +33,11 @@ void context_destroy(void)
 
 	if (CTX_FILE)
 		fclose(CTX_FILE);
-	/* if (ctx->stack) stack_free(ctx->stack); */
+	if (ctx->stack)
+		stack_free(&ctx->stack);
 	if (CTX_LINE)
 		free(CTX_LINE);
+	free(ctx);
 }
 
 /**
@@ -60,6 +62,7 @@ void monty_destroy(const char *format, ...)
 	vfprintf(stderr, format, ap);
 	va_end(ap);
 
+	context_destroy();
 	exit(EXIT_FAILURE);
 }
 

@@ -46,10 +46,7 @@ loop:
 	if (state == T_EOF)
 		goto end;
 	if (state == T_ERR)
-	{
-		fprintf(stderr, "Error: malloc failed\n");
-		return (EXIT_FAILURE);
-	}
+		monty_exit_msg("Error: malloc failed\n");
 	if (T_HAS_DATA(state))
 		runner();
 	if (CTX_LINE)
