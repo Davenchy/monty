@@ -14,6 +14,18 @@
 gcc -Wall -Werror -Wextra -pedantic -std=c89 -o monty *.c
 ```
 
+## Usage
+
+```bash
+./monty <script>
+```
+
+- example
+
+```bash
+./monty ./bytecodes/strings.m
+```
+
 ## Examples
 
 - Check the `/bytecodes` directory for example scripts
