@@ -20,14 +20,19 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-/* opcodes1 */
+/* opcodes1.c */
 void push_opcode(stack_t **stack, unsigned int line_number);
 void pall_opcode(stack_t **stack, unsigned int line_number);
 void pint_opcode(stack_t **stack, unsigned int UNUSE line_number);
 void pop_opcode(stack_t **stack, unsigned int UNUSE line_number);
 void swap_opcode(stack_t **stack, unsigned int UNUSE line_number);
-/* opcodes2 */
+/* opcodes2.c */
 void add_opcode(stack_t **stack, unsigned int UNUSE line_number);
+void sub_opcode(stack_t **stack, unsigned int UNUSE line_number);
+void mul_opcode(stack_t **stack, unsigned int UNUSE line_number);
+void div_opcode(stack_t **stack, unsigned int UNUSE line_number);
+void mod_opcode(stack_t **stack, unsigned int UNUSE line_number);
+/* opcodes3.c */
 void nop_opcode(stack_t **stack, unsigned int UNUSE line_number);
 
 #endif

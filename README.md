@@ -57,3 +57,20 @@ push 5 # this is another comment
 ### nop
 
 - doesn't do anything
+
+### sub
+
+- subtracts the top elements of the stack by the second top one
+
+### div
+
+- divides the second top element of the stack by the top one
+
+### mul
+
+- multiplies the second top element of the stack by the top one
+
+### mod
+
+- computes the rest of the division of the second top element of the stack by
+the top one

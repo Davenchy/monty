@@ -16,7 +16,8 @@ void runner(void)
 	instruction_t instructions[] = {
 		{ "push", push_opcode }, { "pall", pall_opcode }, { "pint", pint_opcode },
 		{ "pop", pop_opcode }, { "swap", swap_opcode }, { "add", add_opcode },
-		{ "nop", nop_opcode },
+		{ "sub", sub_opcode }, { "div", div_opcode }, { "mul", mul_opcode },
+		{ "mod", mod_opcode }, { "nop", nop_opcode },
 		{ NULL, NULL },
 	};
 
