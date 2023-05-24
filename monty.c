@@ -1,65 +1,54 @@
 #include "includes/monty.h"
-#include "includes/reader.h"
-#include <stdio.h>
+#include <stdarg.h>
 #include <stdlib.h>
-#include <sys/types.h>
 
-__attribute__((noreturn)) void main_loop(FILE * file);
+context_t ctx;
 
 /**
- * main_loop - the main interpreter loop to read line by line and execute them
- * @file: the opend script file stream object
+ * context_init - initialize the global context object
  */
-void main_loop(FILE *file)
+void context_init(void)
 {
-	char *line = NULL;
-	ssize_t state = 0;
-
-loop:
-	fflush(stdout);
-	state = readline(file, &line);
-	if (state == T_EOF)
-		goto end;
-	if (state == T_ERR)
-		goto err;
-	if (T_HAS_DATA(state))
-		printf("%s\n", line);
-	if (line)
-		free(line);
-	goto loop;
-end:
-	fclose(file);
-	exit(EXIT_SUCCESS);
-err:
-	fclose(file);
-	fprintf(stderr, "Error: malloc failed\n");
-	exit(EXIT_FAILURE);
+	ctx.file = NULL;
+	ctx.stack = NULL;
+	ctx.line = NULL;
+	ctx.cmd.opcode = NULL;
+	ctx.cmd.arg = NULL;
+	ctx.line_number = 0;
 }
 
 /**
- * main - Monty language bytecodes interpreter
- * @argc: number of arguments
- * @argv: array of arguments
- * Return: exit status code
+ * context_destroy - destroy the global context object
  */
-int main(int argc, char **argv)
+void context_destroy(void)
 {
-	FILE *file = NULL;
-	char *filepath = NULL;
+	if (ctx.file)
+		fclose(ctx.file);
+	/* if (ctx.stack) free stack */
+	if (ctx.line)
+		free(ctx.line);
+}
 
-	if (argc != 2)
-	{
-		fprintf(stderr, "USAGE: monty file\n");
-		exit(EXIT_FAILURE);
-	}
+/**
+ * monty_exit_msg - end the interpreter with error message
+ * @msg: the error message
+ */
+void monty_exit_msg(const char *msg)
+{
+	monty_destroy("L%lu: usage: %s\n", ctx.line_number, msg);
+}
 
-	filepath = argv[1];
-	file = fopen(filepath, "r");
-	if (!file)
-	{
-		fprintf(stderr, "Error: Can't open file %s\n", filepath);
-		exit(EXIT_FAILURE);
-	}
+/**
+ * monty_destroy - free memory show error message and exit
+ * @format: the printf format
+ */
+void monty_destroy(const char *format, ...)
+{
+	va_list ap;
 
-	main_loop(file);
+	va_start(ap, format);
+	vfprintf(stderr, format, ap);
+	va_end(ap);
+
+	exit(EXIT_FAILURE);
 }

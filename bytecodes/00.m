@@ -1,6 +1,16 @@
-   push    1    
+push 5
+   push   6
 
-     push 2
+     push 8
+# this is a comment
 
-   push    3   
+# push w
+
+#   push    7 
+
+
+
+
+
+
 pall

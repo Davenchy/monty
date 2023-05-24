@@ -20,7 +20,8 @@ typedef struct command_s
 	char *opcode, *arg;
 } command_t;
 
-ssize_t readline(FILE *file, char **line);
+ssize_t readline(void);
 int parse_line(char *line, command_t *cmd);
+int is_digit(char *arg);
 
 #endif

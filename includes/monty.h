@@ -1,34 +1,37 @@
 #ifndef __MONTY_H__
 #define __MONTY_H__
 
-/**
- * struct stack_s - doubly linked list representation of a stack (or queue)
- * @n: integer
- * @prev: points to the previous element of the stack (or queue)
- * @next: points to the next element of the stack (or queue)
- *
- * Description: doubly linked list node structure
- * for stack, queues, LIFO, FIFO
- */
-typedef struct stack_s
-{
-	int n;
-	struct stack_s *prev;
-	struct stack_s *next;
-} stack_t;
+#include "reader.h"
+#include "stack.h"
+#include <stdio.h>
 
 /**
- * struct instruction_s - opcode and its function
- * @opcode: the opcode
- * @f: function to handle the opcode
- *
- * Description: opcode and its function
- * for stack, queues, LIFO, FIFO
+ * struct context_s - object that holds the state of the interpreter
+ * @file: the currently opend file stream object
+ * @cmd: the command params
+ * @stack: the current stack state
+ * @line: the readed line from the file
+ * @line_number: the current line number in the script file
  */
-typedef struct instruction_s
+typedef struct context_s
 {
-	char *opcode;
-	void (*f)(stack_t **stack, unsigned int line_number);
-} instruction_t;
+	FILE *file;
+	command_t cmd;
+	stack_t *stack;
+	char *line;
+	size_t line_number;
+} context_t;
+
+extern context_t ctx;
+
+void context_init(void);
+void context_destroy(void);
+void monty_exit_msg(const char *msg);
+/**
+ * monty_destroy - free memory show error message and exit
+ * @format: the printf format
+ */
+extern void monty_destroy(const char *format, ...)
+	__attribute__((noreturn, format(printf, 1, 2)));
 
 #endif
