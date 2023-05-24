@@ -6,6 +6,8 @@
 #include <string.h>
 #include <sys/types.h>
 
+__attribute__((noreturn)) void mainloop(void);
+
 /**
  * runner - the core function to execute opcodes
  */
@@ -21,7 +23,9 @@ void runner(void)
 		{ "nop", nop_opcode }, { NULL, NULL },
 	};
 
-	parse_line(CTX_LINE, &CTX_CMD);
+	/*
+	 * printf("%lu: %s(%d)\n", ctx->line_number, CTX_CMD.opcode, CTX_CMD.value);
+	 */
 	len = strlen(CTX_CMD.opcode);
 	for (i = 0; instructions[i].opcode; i++)
 		if (!strncmp(instructions[i].opcode, CTX_CMD.opcode, len))
@@ -35,31 +39,27 @@ void runner(void)
 }
 
 /**
- * main_loop - the main interpreter loop to read line by line and execute them
- * Return: status code
+ * mainloop - the main interpreter loop to read line by line and execute them
  */
-int main_loop(void)
+void mainloop(void)
 {
-	CTX_DEC;
-	ssize_t state = 0;
+	ssize_t readstate = 0;
 
 loop:
 	fflush(stdout);
-	state = readline();
-	if (state == T_EOF)
+	readstate = readline();
+	if (readstate == T_EMPTY)
+		goto loop;
+	else if (readstate == T_EOF)
 		goto end;
-	if (state == T_ERR)
+	else if (readstate == T_ERR)
 		monty_destroy("Error: malloc failed\n");
-	if (T_HAS_DATA(state))
+	else if (T_HAS_DATA(readstate))
 		runner();
-	if (CTX_LINE)
-	{
-		free(CTX_LINE);
-		CTX_LINE = NULL;
-	}
 	goto loop;
 end:
-	return (EXIT_SUCCESS);
+	context_destroy();
+	exit(EXIT_SUCCESS);
 }
 
 /**
@@ -72,14 +72,13 @@ int main(int argc, char **argv)
 {
 	char *filepath = NULL;
 	context_t *ctx;
-	int state = EXIT_SUCCESS;
 
+	/* make sure to initialize the context object to hold the state */
 	if (!context_init())
 	{
 		fprintf(stderr, "Error: malloc failed\n");
 		exit(EXIT_FAILURE);
 	}
-	ctx = CTX_LOAD;
 
 	if (argc != 2)
 	{
@@ -88,6 +87,7 @@ int main(int argc, char **argv)
 	}
 
 	filepath = argv[1];
+	ctx = CTX_LOAD; /* load context to store the file object */
 	CTX_FILE = fopen(filepath, "r");
 	if (!CTX_FILE)
 	{
@@ -95,7 +95,5 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 
-	state = main_loop();
-	context_destroy();
-	return (state);
+	mainloop();
 }

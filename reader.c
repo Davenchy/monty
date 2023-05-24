@@ -5,106 +5,84 @@
 #include <string.h>
 
 /**
- * skip_whitespaces - a util function to skip whitespaces while reading line
- * @c: the last character value
- * Return: the last modified character value
+ * resetline - resets the line and the cmd values to zeros and NULLs
  */
-char skip_whitespaces(char c)
+void resetline(void)
 {
 	CTX_DEC;
 
-	for (; c != -1 && c != 10 && c != '#' && isspace(c); c = fgetc(CTX_FILE))
-		continue;
-	if (c == '#')
-		for (; c != -1 && c != 10; c = fgetc(CTX_FILE))
-			continue;
-	return (c);
+	if (!CTX_LINE)
+		return;
+	free(CTX_LINE);
+	CTX_LINE = NULL;
+	CTX_CMD.opcode = NULL;
+	CTX_CMD.arg = NULL;
+	CTX_CMD.value = 0;
 }
 
 /**
- * readtoken - read the next token
- * @buffer: the temp buffer to read characters into
- * @c: the last character value
- * @size: pointer to the temp buffer size
- * @tsize: pointer to the token size
- * Return: the last modified character value
- */
-char readtoken(char *buffer, char c, size_t *size, size_t *tsize)
-{
-	CTX_DEC;
-
-loop:
-	if (c == -1 || c == '#' || *size > BUFFER_SIZE || isspace(c))
-		return (c);
-	buffer[(*size)++] = c;
-	c = fgetc(CTX_FILE);
-	(*tsize)++;
-	goto loop;
-}
-
-/**
- * readline - read the next script line from the script file
+ * readline - read one line from the file, trim it then set ctx.line and return
+ * its size or a state
  *
  * Description:
- * resetting lineptr value to NULL so make sure to free memory before call
- * if any allocated.
+ * Reads the next line from the script file then trimming it
+ * then allocates a fit memory for the new line and store it in ctx->line.
  *
- * returns pointer to allocated cstring
- * that has the next format `opcode[ arg]`.
+ * Return States:
+ * +ve value: line size
+ * T_EMPTY: Empty
+ * T_EOF: end of file
+ * T_ERR: malloc error
  *
- * Return: the size of the line or T_ERR on error T_EMPTY on empty line T_EOF
- * on end of file
+ * Return: 0 for empty, positive value for the size of the line or a state
  */
 ssize_t readline(void)
 {
 	CTX_DEC;
-	char buffer[BUFFER_SIZE], c = 0;
-	size_t size = 0, opsize = 0, argsize = 0;
+	char buffer[BUFFER_SIZE], lc = 0, c = 0;
+	size_t size = 0;
 
-	CTX_LINE = NULL;
-loop:
-	if (c == 10)
-		ctx->line_number++;
-	c = fgetc(CTX_FILE);
-	c = skip_whitespaces(c);
-	c = readtoken(buffer, c, &size, &opsize);
-	/* is empty line */
-	if (!opsize && c != -1)
-		goto loop;
-
-	/* EOF */
-	if (c == -1)
-		return (T_EOF);
-
-	c = skip_whitespaces(c);
-	c = readtoken(buffer, c, &size, &argsize);
-
-	/* allocate token */
-	size = opsize + argsize + (argsize ? 1 : 0);
-	CTX_LINE = malloc(size);
-	if (!CTX_LINE)
-		return (T_ERR);
-	CTX_LINE[size] = 0;
-
-	/* copy bytes */
-	memcpy(CTX_LINE, buffer, opsize);
-	if (argsize)
+	resetline(); /* reset line if has value */
+	for (c = fgetc(CTX_FILE); c != -1 && c != 10 && c != '#' &&
+		size < BUFFER_SIZE; c = fgetc(CTX_FILE))
 	{
-		CTX_LINE[opsize] = ' ';
-		memcpy(CTX_LINE + opsize + 1, buffer + opsize, argsize);
+		if ((!lc && isspace(c)) || (isspace(lc) && isspace(c)))
+		{
+			lc = c;
+			continue; /* ignore waste chars */
+		}
+		buffer[size++] = c; /* write char to buffer */
+		lc = c;
 	}
 
-	ctx->line_number++;
+	if (c == '#') /* handle comments, ignore chars until the end of the file */
+		for (; c != -1 && c != 10; c = fgetc(CTX_FILE))
+			continue;
+
+	ctx->line_number++; /* count a line */
+	if (c == -1 && !size)
+		return (T_EOF); /* handle end of file case */
+	if (!size)
+		return (T_EMPTY); /* handle empty file case */
+
+	/* allocate a new line */
+	CTX_LINE = malloc(size + 1);
+	if (!CTX_LINE)
+		return (T_ERR);
+	CTX_LINE[size] = 0; /* set NULL char at the end */
+	/* copy bytes from buffer to the allocated line */
+	memcpy(CTX_LINE, buffer, size);
+	parseline(CTX_LINE, &CTX_CMD); /* parse arguments */
 	return (size);
 }
 
 /**
- * parse_line - parse command line into tokens
+ * parseline - parse command line into tokens
  * @line: the command line cstring
  * @cmd: the command object to fill with tokens
  * Return: 1 on success and 0 on fail
  */
-int parse_line(char *line, command_t *cmd)
+int parseline(char *line, command_t *cmd)
 {
 	cmd->opcode = NULL;
 	cmd->arg = NULL;
@@ -115,7 +93,7 @@ int parse_line(char *line, command_t *cmd)
 	cmd->opcode = strtok(line, " ");
 	if (cmd->opcode)
 		cmd->arg = strtok(NULL, " ");
-	if (cmd->arg && is_digit(cmd->arg))
+	if (isadigit(cmd->arg))
 	{
 		if (cmd->arg[0] == '-')
 			cmd->value = -(atoi(cmd->arg + 1));
@@ -128,15 +106,15 @@ int parse_line(char *line, command_t *cmd)
 }
 
 /**
- * is_digit - check if the cstring is a digit written in ascii form
+ * isadigit - check if the cstring is a digit written in ascii form
  * @arg: the cstring
  * Return: 1 if true else 0
  */
-int is_digit(char *arg)
+int isadigit(char *arg)
 {
 	if (!arg)
 		return (0);
-	if (*arg == '-')
+	if (*arg == '-') /* is a start of a negative integer */
 		arg++;
 	for (; *arg; arg++)
 		if (!isdigit(*arg))
