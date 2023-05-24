@@ -68,4 +68,24 @@ void pop_opcode(stack_t **stack, unsigned int UNUSE line_number)
 	curr = stack_pop(stack);
 	if (!curr)
 		monty_exit_msg("can't pop an empty stack");
+	free(curr);
+}
+
+/**
+ * swap_opcode - swaps the top most two elements of the stack
+ * @stack: pointer to the stack head
+ * @line_number: the current line number
+ */
+void swap_opcode(stack_t **stack, unsigned int UNUSE line_number)
+{
+	stack_t *curr;
+	int n;
+
+	curr = stack_top(stack);
+	if (!curr || !curr->prev)
+		monty_exit_msg("can't swap, stack too short");
+
+	n = curr->n;
+	curr->n = curr->prev->n;
+	curr->prev->n = n;
 }

@@ -34,3 +34,19 @@ gcc -Wall -Werror -Wextra -pedantic -std=c89 -o monty *.c
 ### pint
 
 - prints the value at the top of the stack
+
+### pop
+
+- removes the value at the top of the stack
+
+### swap
+
+- swaps the top two elements of the stack
+
+### add
+
+- adds the top two elements of the stack
+
+### nop
+
+- doesn't do anything
