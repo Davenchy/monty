@@ -18,6 +18,7 @@
 typedef struct command_s
 {
 	char *opcode, *arg;
+	int value;
 } command_t;
 
 ssize_t readline(void);

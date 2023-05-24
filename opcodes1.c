@@ -12,16 +12,14 @@
 void push_opcode(stack_t **stack, unsigned int UNUSE line_number)
 {
 	CTX_DEC;
-	int value;
 
 	if (!stack)
 		return;
 
-	if (!CTX_CMD.arg || !is_digit(CTX_CMD.arg))
+	if (!CTX_CMD.arg)
 		monty_exit_msg("usage: push integer");
 
-	value = atoi(CTX_CMD.arg);
-	stack_push(stack, value);
+	stack_push(stack, CTX_CMD.value);
 }
 
 /**

@@ -106,11 +106,24 @@ loop:
  */
 int parse_line(char *line, command_t *cmd)
 {
+	cmd->opcode = NULL;
+	cmd->arg = NULL;
+	cmd->value = 0;
 	if (!line)
 		return (0);
+
 	cmd->opcode = strtok(line, " ");
 	if (cmd->opcode)
 		cmd->arg = strtok(NULL, " ");
+	if (cmd->arg && is_digit(cmd->arg))
+	{
+		if (cmd->arg[0] == '-')
+			cmd->value = -(atoi(cmd->arg + 1));
+		else
+			cmd->value = atoi(cmd->arg);
+	}
+	else
+		cmd->arg = NULL;
 	return (1);
 }
 
@@ -123,6 +136,8 @@ int is_digit(char *arg)
 {
 	if (!arg)
 		return (0);
+	if (*arg == '-')
+		arg++;
 	for (; *arg; arg++)
 		if (!isdigit(*arg))
 			return (0);
