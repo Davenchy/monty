@@ -33,52 +33,77 @@ push 5 # this is another comment
 
 - usage: `push <int>`
     - where `<int>` is an integer
+- check example `00.m`
 
 ### pall
 
 - prints all the values in the stack from top to bottom
+- check example `00.m`
 
 ### pint
 
 - prints the value at the top of the stack
+- check example `06.m`
 
 ### pop
 
 - removes the value at the top of the stack
+- check example `07.m`
 
 ### swap
 
 - swaps the top two elements of the stack
+- check example `09.m`
 
 ### add
 
 - adds the top two elements of the stack
-
-### nop
-
-- doesn't do anything
+- check example `arthm_ops.m`
 
 ### sub
 
 - subtracts the top elements of the stack by the second top one
+- check example `arthm_ops.m`
 
 ### div
 
 - divides the second top element of the stack by the top one
+- check example `arthm_ops.m`
 
 ### mul
 
 - multiplies the second top element of the stack by the top one
+- check example `arthm_ops.m`
 
 ### mod
 
 - computes the rest of the division of the second top element of the stack by
 the top one
+- check example `arthm_ops.m`
 
 ### pchar
 
 - prints the char at the top of the stack
+- check example `strings.m`
 
 ### pstr
 
 - prints the string starting at the top of the stack
+- check example `strings.m`
+
+### rotl
+
+- rotates the stack to the top
+- The top element of the stack becomes the last one,
+and the second top element of the stack becomes the first one
+- check example `35.m`
+
+### rotr
+
+- rotates the stack to the bottom
+- The last element of the stack becomes the top element of the stack
+- check example `35.m`
+
+### nop
+
+- doesn't do anything

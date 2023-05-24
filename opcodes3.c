@@ -50,6 +50,51 @@ void pstr_opcode(stack_t **stack, unsigned int UNUSE line_number)
 	putchar(10);
 }
 
+
+/**
+ * rotl_opcode - rotates the stack to the top
+ * @stack: pointer to the stack head
+ * @line_number: the current line number
+ */
+void rotl_opcode(stack_t **stack, unsigned int UNUSE line_number)
+{
+	stack_t *t, *h;
+
+	t = stack_top(stack);
+	h = *stack;
+
+	if (!t || t == h)
+		return;
+
+	t->next = h;
+	t->prev->next = NULL;
+	t->prev = NULL;
+	h->prev = t;
+	*stack = t;
+}
+
+/**
+ * rotr_opcode - rotates the stack to the bottom
+ * @stack: pointer to the stack head
+ * @line_number: the current line number
+ */
+void rotr_opcode(stack_t **stack, unsigned int UNUSE line_number)
+{
+	stack_t *t, *h;
+
+	t = stack_top(stack);
+	h = *stack;
+
+	if (!t || t == h)
+		return;
+
+	t->next = h;
+	h->prev = t;
+	h->next->prev = NULL;
+	*stack = h->next;
+	h->next = NULL;
+}
+
 /**
  * nop_opcode - do no thing
  * @stack: pointer to the stack head
