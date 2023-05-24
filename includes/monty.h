@@ -22,12 +22,21 @@ typedef enum action_e
 { A_GET, A_SET } action_t;
 
 /**
+ * enum data_behavior_e - the data behavior
+ * @B_STACK: data behave like a stack data structure
+ * @B_QUEUE: data behave like a queue data structure
+ */
+typedef enum data_behavior_e
+{ B_STACK, B_QUEUE } data_behavior_t;
+
+/**
  * struct context_s - object that holds the state of the interpreter
  * @file: the currently opend file stream object
  * @cmd: the command params
  * @stack: the current stack state
  * @line: the readed line from the file
  * @line_number: the current line number in the script file
+ * @data_behavior: the current data behavior
  */
 typedef struct context_s
 {
@@ -36,6 +45,7 @@ typedef struct context_s
 	stack_t *stack;
 	char *line;
 	size_t line_number;
+	data_behavior_t data_behavior;
 } context_t;
 
 int context_init(void);

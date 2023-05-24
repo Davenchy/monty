@@ -96,26 +96,39 @@ the top one
 ### pchar
 
 - prints the char at the top of the stack
-- check example `strings.m`
+- check example `strings.m, strings2.m`
 
 ### pstr
 
 - prints the string starting at the top of the stack
-- check example `strings.m`
+- check example `strings.m, strings2.m`
 
 ### rotl
 
-- rotates the stack to the top
-- The top element of the stack becomes the last one,
-and the second top element of the stack becomes the first one
+- rotates the stack to the __top__
+- __The top__ element of the stack becomes ___the last one__,
+and __the second top__ element of the stack becomes __the first one__
 - check example `35.m`
 
 ### rotr
 
-- rotates the stack to the bottom
-- The last element of the stack becomes the top element of the stack
+- rotates the stack to the __bottom__
+- __The last__ element of the stack becomes __the top__ element of the stack
 - check example `35.m`
+
+### stack
+
+- sets the format of the data to stack (Last In First Out).
+- This is __the default behavior__ of the program.
+- __On Switch__: the front of the queue becomes the top of the stack
+- check example `47.m, 47_extra.m`
+
+### queue
+
+- sets the format of the data to queue (First In First Out).
+- __On Switch__: the top of the stack becomes the front of the queue
+- check example `47.m, 47_extra.m`
 
 ### nop
 
-- doesn't do anything
+- No Operation - Do Nothing

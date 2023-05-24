@@ -20,6 +20,7 @@ int context_init(void)
 	CTX_CMD.arg = NULL;
 	ctx->stack = NULL;
 	ctx->line_number = 0;
+	ctx->data_behavior = B_STACK;
 	CTX_SET(ctx);
 	return (1);
 }

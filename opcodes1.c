@@ -20,6 +20,8 @@ void push_opcode(stack_t **stack, unsigned int UNUSE line_number)
 		monty_exit_msg("usage: push integer");
 
 	stack_push(stack, CTX_CMD.value);
+	if (ctx->data_behavior == B_QUEUE)
+		rotl_opcode(stack, line_number);
 }
 
 /**

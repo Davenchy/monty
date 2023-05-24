@@ -21,6 +21,7 @@ void runner(void)
 		{ "sub", sub_opcode }, { "div", div_opcode }, { "mul", mul_opcode },
 		{ "mod", mod_opcode }, { "pchar", pchar_opcode }, { "pstr", pstr_opcode },
 		{ "rotl", rotl_opcode }, { "rotr", rotr_opcode },
+		{ "stack", stack_opcode }, { "queue", queue_opcode },
 		{ "nop", nop_opcode }, { NULL, NULL },
 	};
 
