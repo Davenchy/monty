@@ -17,8 +17,8 @@ void runner(void)
 		{ "push", push_opcode }, { "pall", pall_opcode }, { "pint", pint_opcode },
 		{ "pop", pop_opcode }, { "swap", swap_opcode }, { "add", add_opcode },
 		{ "sub", sub_opcode }, { "div", div_opcode }, { "mul", mul_opcode },
-		{ "mod", mod_opcode }, { "nop", nop_opcode },
-		{ NULL, NULL },
+		{ "mod", mod_opcode }, { "pchar", pchar_opcode }, { "pstr", pstr_opcode },
+		{ "nop", nop_opcode }, { NULL, NULL },
 	};
 
 	parse_line(CTX_LINE, &CTX_CMD);

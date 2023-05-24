@@ -74,3 +74,11 @@ push 5 # this is another comment
 
 - computes the rest of the division of the second top element of the stack by
 the top one
+
+### pchar
+
+- prints the char at the top of the stack
+
+### pstr
+
+- prints the string starting at the top of the stack
