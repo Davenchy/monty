@@ -12,16 +12,12 @@ void pchar_opcode(stack_t **stack, unsigned int UNUSE line_number)
 {
 	stack_t *a;
 
-	a = stack_pop(stack);
+	a = stack_top(stack);
 	if (!a)
 		monty_exit_msg("can't pchar, stack empty");
 	if (a->n < 0 || a->n >= 128)
-	{
-		free(a);
 		monty_exit_msg("can't pchar, value out of range");
-	}
 	printf("%c\n", a->n);
-	free(a);
 }
 
 /**
@@ -37,16 +33,8 @@ void pstr_opcode(stack_t **stack, unsigned int UNUSE line_number)
 {
 	stack_t *a;
 
-	for (a = stack_pop(stack); a; a = stack_pop(stack))
-	{
-		if (a->n <= 0 || a->n >= 128)
-		{
-			free(a);
-			break;
-		}
+	for (a = stack_top(stack); a && a->n > 0 && a->n < 128; a = a->next)
 		printf("%c", a->n);
-		free(a);
-	}
 	putchar(10);
 }
 
