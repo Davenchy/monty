@@ -20,7 +20,7 @@ void pchar_opcode(stack_t **stack, unsigned int UNUSE line_number)
 		free(a);
 		monty_exit_msg("can't pchar, value out of range");
 	}
-	printf("%c", a->n);
+	printf("%c\n", a->n);
 	free(a);
 }
 
