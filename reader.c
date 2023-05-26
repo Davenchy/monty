@@ -1,5 +1,5 @@
-#include "includes/reader.h"
-#include "includes/monty.h"
+#include "reader.h"
+#include "monty.h"
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>

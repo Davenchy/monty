@@ -1,4 +1,4 @@
-#include "includes/stack.h"
+#include "stack.h"
 #include <stdlib.h>
 
 /**

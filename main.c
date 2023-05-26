@@ -1,6 +1,6 @@
-#include "includes/monty.h"
-#include "includes/opcodes.h"
-#include "includes/reader.h"
+#include "monty.h"
+#include "opcodes.h"
+#include "reader.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

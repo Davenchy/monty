@@ -1,5 +1,5 @@
-#include "includes/monty.h"
-#include "includes/opcodes.h"
+#include "monty.h"
+#include "opcodes.h"
 #include <ctype.h>
 #include <stdlib.h>
 
