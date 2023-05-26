@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 
-#define BUFFER_SIZE 16
+#define BUFFER_SIZE 100
 #define T_EMPTY 0
 #define T_EOF -1
 #define T_ERR -2
