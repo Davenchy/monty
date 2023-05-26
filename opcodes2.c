@@ -65,7 +65,7 @@ void div_opcode(stack_t **stack, unsigned int UNUSE line_number)
 	a = stack_pop(stack);
 	b = stack_top(stack);
 	if (!a || !b)
-		monty_exit_msg("can't mul, stack too short");
+		monty_exit_msg("can't div, stack too short");
 	if (!a->n)
 	{
 		free(a);
@@ -88,7 +88,7 @@ void mod_opcode(stack_t **stack, unsigned int UNUSE line_number)
 	a = stack_pop(stack);
 	b = stack_top(stack);
 	if (!a || !b)
-		monty_exit_msg("can't mul, stack too short");
+		monty_exit_msg("can't mod, stack too short");
 	if (!a->n)
 	{
 		free(a);
