@@ -33,7 +33,7 @@ void pstr_opcode(stack_t **stack, unsigned int UNUSE line_number)
 {
 	stack_t *a;
 
-	for (a = stack_top(stack); a && a->n > 0 && a->n < 128; a = a->next)
+	for (a = stack_top(stack); a && a->n > 0 && a->n < 128; a = a->prev)
 		printf("%c", a->n);
 	putchar(10);
 }
